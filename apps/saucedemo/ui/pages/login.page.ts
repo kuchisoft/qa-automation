@@ -13,15 +13,17 @@ export class LoginPage {
         };
     }
 
-    get label() {
+    get input() {
         return {
             username: this.page.locator('[data-test="username"]'),
             password: this.page.locator('[data-test="password"]'),
         };
     }
 
-    get errorMessage() {
-        return this.page.locator('[data-test="error"]');
+    get error() {
+        return {
+            invalidCredentials: this.page.locator('[data-test="error"]'),
+        };
     }
 
     async goto() {
@@ -29,8 +31,8 @@ export class LoginPage {
     }
 
     async loginAs(username: string, password: string) {
-        await this.label.username.fill(username);
-        await this.label.password.fill(password);
+        await this.input.username.fill(username);
+        await this.input.password.fill(password);
         await this.btn.login.click();
     }
 }

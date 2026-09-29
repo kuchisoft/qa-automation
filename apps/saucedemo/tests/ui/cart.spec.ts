@@ -1,9 +1,6 @@
 import { expect, test } from '../../ui/fixtures/ui.fixtures';
-import { storageStateFor } from '../../config/roles';
 
 test.describe('cart', () => {
-  test.use({ storageState: storageStateFor('standard') });
-
   test.beforeEach(async ({ inventoryPage }) => {
     await inventoryPage.goto();
   });
@@ -12,10 +9,10 @@ test.describe('cart', () => {
     await inventoryPage.addBackpackToCart();
     await inventoryPage.goToCart();
 
-    await expect(cartPage.cartItems).toHaveCount(1);
+    await expect(cartPage.list.items).toHaveCount(1);
 
     await cartPage.removeBackpack();
 
-    await expect(cartPage.cartItems).toHaveCount(0);
+    await expect(cartPage.list.items).toHaveCount(0);
   });
 });

@@ -14,8 +14,10 @@ export class CartPage {
         };
     }
 
-    get cartItems() {
-        return this.page.locator('.cart_item');
+    get list() {
+        return {
+            items: this.page.locator('.cart_item'),
+        };
     }
 
     async removeBackpack() {

@@ -1,14 +1,10 @@
 import path from 'path';
+import { required } from './env';
 
-/**
- * Single source of truth for Toolshop: who can sign in, where each role lands,
- * and where the two kinds of captured auth state live.
- */
+export const BASE_URL = required('TOOLSHOP_BASE_URL');
+export const API_URL = required('TOOLSHOP_API_URL');
 
-export const BASE_URL = 'https://practicesoftwaretesting.com';
-export const API_URL = 'https://api.practicesoftwaretesting.com';
-
-const SEEDED_PASSWORD = 'welcome01';
+const SEEDED_PASSWORD = required('TOOLSHOP_PASSWORD');
 
 /**
  * Toolshop is a shared, mutable, publicly writable database. Two of its
@@ -26,13 +22,12 @@ const SEEDED_PASSWORD = 'welcome01';
  */
 export const ROLES = {
   admin: {
-    email: 'admin@practicesoftwaretesting.com',
+    email: required('TOOLSHOP_ADMIN_EMAIL'),
     password: SEEDED_PASSWORD,
-    /** Where Toolshop redirects this role immediately after signing in. */
     landingPage: '/admin/dashboard',
   },
   user: {
-    email: 'customer2@practicesoftwaretesting.com',
+    email: required('TOOLSHOP_USER_EMAIL'),
     password: SEEDED_PASSWORD,
     landingPage: '/account',
   },
@@ -40,27 +35,14 @@ export const ROLES = {
 
 export type Role = keyof typeof ROLES;
 
-/** Belongs to nobody, so failed logins against it cannot lock a real account. */
 export const UNKNOWN_ACCOUNT = {
   email: 'qa.unknown.account@example.com',
   password: 'definitely-not-the-password',
 };
 
-/**
- * Both kinds of auth state live in `.auth/` and both are gitignored, because
- * both are secrets with a short life:
- *
- *   .auth/<role>.json         UI   - browser storageState (cookie + localStorage)
- *   .auth/<role>.token.json   API  - bearer token plus the time it was issued
- */
 const AUTH_DIR = path.resolve(__dirname, '..', '.auth');
 
 export const storageStateFor = (role: Role) => path.join(AUTH_DIR, `${role}.json`);
 export const tokenFileFor = (role: Role) => path.join(AUTH_DIR, `${role}.token.json`);
 
-/**
- * Toolshop issues JWTs that live for 300 seconds, which is short enough that a
- * single suite run can outlive one. Anything inside this margin of expiry is
- * treated as already dead and refreshed rather than sent and rejected.
- */
 export const TOKEN_EXPIRY_MARGIN_SECONDS = 30;

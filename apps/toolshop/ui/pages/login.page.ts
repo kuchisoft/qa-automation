@@ -8,21 +8,23 @@ export class LoginPage {
     return this.page.locator('[data-test="login-form"]');
   }
 
-  get emailInput() {
-    return this.page.locator('[data-test="email"]');
+  get input() {
+    return {
+      email: this.page.locator('[data-test="email"]'),
+      password: this.page.locator('[data-test="password"]'),
+    };
   }
 
-  get passwordInput() {
-    return this.page.locator('[data-test="password"]');
+  get btn() {
+    return {
+      submit: this.page.locator('[data-test="login-submit"]'),
+    };
   }
 
-  /** Rendered as `<input type="submit">`, not a `<button>`. */
-  get submitButton() {
-    return this.page.locator('[data-test="login-submit"]');
-  }
-
-  get errorMessage() {
-    return this.page.locator('[data-test="login-error"]');
+  get error() {
+    return {
+      invalidCredentials: this.page.locator('[data-test="login-error"]'),
+    };
   }
 
   async goto() {
@@ -30,20 +32,11 @@ export class LoginPage {
   }
 
   async submit(email: string, password: string) {
-    await this.emailInput.fill(email);
-    await this.passwordInput.fill(password);
-    await this.submitButton.click();
+    await this.input.email.fill(email);
+    await this.input.password.fill(password);
+    await this.btn.submit.click();
   }
 
-  /**
-   * Signs in as a seeded role and waits for that role's landing page.
-   *
-   * `waitForLoadState('networkidle')` is not good enough here, and getting this
-   * wrong cost real debugging time: this is an Angular SPA, so the click
-   * returns immediately, the app then re-fetches /users/me, and only after that
-   * does it redirect to /account or /admin/dashboard. Waiting for the URL is
-   * the only reliable proof that the session actually took hold.
-   */
   async loginAs(role: Role) {
     const { email, password, landingPage } = ROLES[role];
     await this.submit(email, password);

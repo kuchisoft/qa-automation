@@ -1,9 +1,6 @@
 import { expect, test } from '../../ui/fixtures/ui.fixtures';
-import { storageStateFor } from '../../config/roles';
 
 test.describe('checkout', () => {
-  test.use({ storageState: storageStateFor('standard') });
-
   test.beforeEach(async ({ inventoryPage }) => {
     await inventoryPage.goto();
   });
@@ -17,7 +14,7 @@ test.describe('checkout', () => {
     await checkoutPage.continueToOverview();
     await checkoutPage.finishOrder();
 
-    await expect(checkoutPage.completeHeader).toHaveText('Thank you for your order!');
+    await expect(checkoutPage.head.complete).toHaveText('Thank you for your order!');
     await checkoutPage.backToProducts();
   });
 });

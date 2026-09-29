@@ -3,8 +3,10 @@ import type { Page } from '@playwright/test';
 export class ProductDetailPage {
   constructor(readonly page: Page) {}
 
-  get name() {
-    return this.page.locator('[data-test="product-name"]');
+  get head() {
+    return {
+      name: this.page.locator('[data-test="product-name"]'),
+    };
   }
 
   get unitPrice() {
@@ -15,23 +17,20 @@ export class ProductDetailPage {
     return this.page.locator('[data-test="product-description"]');
   }
 
-  get quantityInput() {
-    return this.page.locator('[data-test="quantity"]');
+  get input() {
+    return {
+      quantity: this.page.locator('[data-test="quantity"]'),
+    };
   }
 
-  get increaseQuantityButton() {
-    return this.page.locator('[data-test="increase-quantity"]');
+  get btn() {
+    return {
+      increaseQuantity: this.page.locator('[data-test="increase-quantity"]'),
+      addToCart: this.page.locator('[data-test="add-to-cart"]'),
+      addToFavorites: this.page.locator('[data-test="add-to-favorites"]'),
+    };
   }
 
-  get addToCartButton() {
-    return this.page.locator('[data-test="add-to-cart"]');
-  }
-
-  get addToFavoritesButton() {
-    return this.page.locator('[data-test="add-to-favorites"]');
-  }
-
-  /** Same header badge as on the listing page. */
   get cartBadge() {
     return this.page.locator('[data-test="nav-cart"]');
   }
@@ -41,7 +40,7 @@ export class ProductDetailPage {
   }
 
   async addToCart() {
-    await this.addToCartButton.click();
+    await this.btn.addToCart.click();
   }
 
   async unitPriceValue(): Promise<number> {

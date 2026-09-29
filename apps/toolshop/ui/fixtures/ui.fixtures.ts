@@ -11,13 +11,6 @@ type UiFixtures = {
   productDetailPage: ProductDetailPage;
 };
 
-/**
- * The browser-context half of the app, mirroring api/fixtures/api.fixtures.ts.
- *
- * Page objects are lazily constructed over the built-in `page`, so a spec only
- * pays for what it asks for, and one `test` export serves every spec that
- * drives the UI.
- */
 export const test = base.extend<UiFixtures>({
   loginPage: async ({ page }, use) => {
     await use(new LoginPage(page));

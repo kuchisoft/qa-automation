@@ -1,3 +1,6 @@
+# Environment - credentials live here; each app's .env.example is committed
+.env
+
 # Dependencies
 node_modules/
 

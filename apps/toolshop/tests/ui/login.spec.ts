@@ -18,20 +18,12 @@ test.describe('login', () => {
     await accountPage.expectSignedIn();
   });
 
-  /**
-   * Uses an account that belongs to nobody, on purpose.
-   *
-   * A wrong password against a real seeded account still counts as a failed
-   * attempt, and enough of them lock that account for everyone. That is exactly
-   * how `customer@practicesoftwaretesting.com` ended up returning 423 today,
-   * so no negative login test here touches a real account.
-   */
   test('an account that does not exist is rejected', async ({ page, loginPage }) => {
     await loginPage.goto();
     await loginPage.submit(UNKNOWN_ACCOUNT.email, UNKNOWN_ACCOUNT.password);
 
-    await expect(loginPage.errorMessage).toBeVisible();
-    await expect(loginPage.errorMessage).toContainText('Invalid email or password');
+    await expect(loginPage.error.invalidCredentials).toBeVisible();
+    await expect(loginPage.error.invalidCredentials).toContainText('Invalid email or password');
     await expect(page).toHaveURL(/\/auth\/login$/);
   });
 });

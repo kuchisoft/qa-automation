@@ -15,7 +15,7 @@ export class CheckoutPage {
         };
     }
 
-    get label() {
+    get input() {
         return {
             firstName: this.page.locator('[data-test="firstName"]'),
             lastName: this.page.locator('[data-test="lastName"]'),
@@ -23,14 +23,16 @@ export class CheckoutPage {
         };
     }
 
-    get completeHeader() {
-        return this.page.locator('[data-test="complete-header"]');
+    get head() {
+        return {
+            complete: this.page.locator('[data-test="complete-header"]'),
+        };
     }
 
     async fillCustomerInfo(firstName: string, lastName: string, postalCode: string) {
-        await this.label.firstName.fill(firstName);
-        await this.label.lastName.fill(lastName);
-        await this.label.postalCode.fill(postalCode);
+        await this.input.firstName.fill(firstName);
+        await this.input.lastName.fill(lastName);
+        await this.input.postalCode.fill(postalCode);
     }
 
     async continueToOverview() {

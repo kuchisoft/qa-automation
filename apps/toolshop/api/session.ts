@@ -9,12 +9,6 @@ import {
   type Role,
 } from '../config/roles';
 
-/**
- * The API equivalent of a storageState file.
- *
- * A token plus the moment it was issued, because Toolshop's JWTs expire after
- * 300 seconds and a cached token with no timestamp is a time bomb.
- */
 export type TokenCache = {
   access_token: string;
   obtained_at: number;
@@ -36,14 +30,6 @@ const readCache = (role: Role): TokenCache | undefined => {
   }
 };
 
-/**
- * Signs a role in against the API and persists the token.
- *
- * Two callers share this: the `toolshop-setup-api` project, which warms the
- * cache before the suite starts, and the API fixture, which calls it whenever
- * a worker has no usable token. The freshness check is what makes caching safe
- * - a stale file is replaced instead of being sent and 401-ing mid-run.
- */
 export async function loginAs(role: Role, { force = false } = {}): Promise<TokenCache> {
   if (!force) {
     const cached = readCache(role);

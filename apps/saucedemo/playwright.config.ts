@@ -1,16 +1,20 @@
 import { devices } from '@playwright/test';
 import { baseConfig } from '../../playwright.base';
-import { BASE_URL } from './config/roles';
+import { BASE_URL, storageState } from './config/roles';
 
 /**
  * Folder layout (see ../../README.md):
  *
- *   config/  roles + credentials + auth-state paths
+ *   config/  credentials + the session path
  *   ui/      page objects and the UI fixtures built from them
- *   tests/   setup/ (produces auth state) and ui/ (the specs)
+ *   tests/   setup/  captures the one session
+ *            login/ signed-out specs, need no session
+ *            ui/     signed-in specs, consume the session
  *
- * Two projects: one captures sessions, one spends them. Nothing signs in
- * through the browser twice.
+ * Three projects, split by session state rather than repeated per spec: the
+ * signed-out login tests live in their own project, so nothing has to opt out,
+ * and `storageState` is declared once here instead of a `test.use()` line in
+ * every signed-in spec. One captured session, zero repetition.
  */
 export default baseConfig({
   testDir: './tests',
@@ -21,19 +25,21 @@ export default baseConfig({
 
   projects: [
     {
-      // Produces .auth/<role>.json for every role. Not a test suite.
       name: 'saucedemo-setup',
       testDir: './tests/setup',
       testMatch: '**/*.setup.ts',
       use: { ...devices['Desktop Chrome'] },
     },
     {
-      // Note: no storageState here. Specs opt in per describe block, so the
-      // default is signed out and login tests need no special-casing.
+      name: 'saucedemo-login',
+      testDir: './tests/login',
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
       name: 'saucedemo-ui',
       testDir: './tests/ui',
       dependencies: ['saucedemo-setup'],
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'], storageState },
     },
   ],
 });

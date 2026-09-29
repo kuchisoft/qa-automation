@@ -20,6 +20,14 @@ jobs:
         node-version: lts/*
     - name: Install dependencies
       run: npm ci
+    - name: Prepare app environments
+      # .env is gitignored, so CI builds each app's from its committed example.
+      # The values are the targets' public demo credentials; for a private
+      # target, define repository Secrets with the same names instead - real
+      # environment variables win over the files, so no copying is needed.
+      run: |
+        cp apps/saucedemo/.env.example apps/saucedemo/.env
+        cp apps/toolshop/.env.example apps/toolshop/.env
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps chromium
     - name: Run ${{ matrix.app }} tests

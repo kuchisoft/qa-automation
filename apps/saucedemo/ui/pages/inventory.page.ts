@@ -10,22 +10,31 @@ export class InventoryPage {
     get btn() {
         return {
             addToCartBackpack: this.page.locator('[data-test="add-to-cart-sauce-labs-backpack"]'),
-            cartLink: this.page.locator('[data-test="shopping-cart-link"]'),
         };
     }
 
-    get label() {
+    get link() {
+        return {
+            cart: this.page.locator('[data-test="shopping-cart-link"]'),
+        };
+    }
+
+    get select() {
         return {
             priceSort: this.page.locator('[data-test="product-sort-container"]'),
         };
     }
 
-    get productsHeader() {
-        return this.page.getByText('Products');
+    get head() {
+        return {
+            products: this.page.getByText('Products'),
+        };
     }
 
-    get inventoryItems() {
-        return this.page.locator('.inventory_item');
+    get list() {
+        return {
+            items: this.page.locator('.inventory_item'),
+        };
     }
 
     get itemPrices() {
@@ -41,7 +50,7 @@ export class InventoryPage {
     }
 
     async sortPriceLowToHigh() {
-        await this.label.priceSort.selectOption('lohi');
+        await this.select.priceSort.selectOption('lohi');
     }
 
     async getItemPrices(): Promise<number[]> {
@@ -54,6 +63,6 @@ export class InventoryPage {
     }
 
     async goToCart() {
-        await this.btn.cartLink.click();
+        await this.link.cart.click();
     }
 }

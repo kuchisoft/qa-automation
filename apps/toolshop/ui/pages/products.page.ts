@@ -1,6 +1,5 @@
 import type { Page } from '@playwright/test';
 
-/** The values Toolshop's sort `<select>` actually uses. */
 export type SortOption =
   | 'name,asc'
   | 'name,desc'
@@ -12,44 +11,45 @@ export type SortOption =
 export class ProductsPage {
   constructor(readonly page: Page) {}
 
-  /** Product tiles. Each card's `data-test` is `product-<ulid>`, hence the prefix match. */
-  get cards() {
-    return this.page.locator('a.card[data-test^="product-"]');
+  get link() {
+    return {
+      cards: this.page.locator('a.card[data-test^="product-"]'),
+      nextPage: this.page.locator('[data-test="pagination-next"]'),
+    };
   }
 
-  get names() {
-    return this.page.locator('[data-test="product-name"]');
+  get head() {
+    return {
+      names: this.page.locator('[data-test="product-name"]'),
+    };
   }
 
-  get priceLabels() {
-    return this.page.locator('[data-test="product-price"]');
+  get text() {
+    return {
+      prices: this.page.locator('[data-test="product-price"]'),
+      outOfStock: this.page.locator('[data-test="out-of-stock"]'),
+    };
   }
 
-  get outOfStockBadges() {
-    return this.page.locator('[data-test="out-of-stock"]');
+  get select() {
+    return {
+      sort: this.page.locator('[data-test="sort"]'),
+    };
   }
 
-  get sortSelect() {
-    return this.page.locator('[data-test="sort"]');
+  get input() {
+    return {
+      search: this.page.locator('[data-test="search-query"]'),
+    };
   }
 
-  get searchInput() {
-    return this.page.locator('[data-test="search-query"]');
+  get btn() {
+    return {
+      search: this.page.locator('[data-test="search-submit"]'),
+      searchReset: this.page.locator('[data-test="search-reset"]'),
+    };
   }
 
-  get searchButton() {
-    return this.page.locator('[data-test="search-submit"]');
-  }
-
-  get searchResetButton() {
-    return this.page.locator('[data-test="search-reset"]');
-  }
-
-  get nextPageLink() {
-    return this.page.locator('[data-test="pagination-next"]');
-  }
-
-  /** Header cart link. Its text is the item count, so "0" means empty. */
   get cartBadge() {
     return this.page.locator('[data-test="nav-cart"]');
   }
@@ -59,24 +59,20 @@ export class ProductsPage {
   }
 
   async search(term: string) {
-    await this.searchInput.fill(term);
-    await this.searchButton.click();
+    await this.input.search.fill(term);
+    await this.btn.search.click();
   }
 
   async sortBy(option: SortOption) {
-    await this.sortSelect.selectOption(option);
+    await this.select.sort.selectOption(option);
   }
 
-  /**
-   * Prices render as `$14.15`, so they are parsed rather than compared as text.
-   * Comparing the strings would make `$9.17` sort above `$14.15`.
-   */
   async prices(): Promise<number[]> {
-    const labels = await this.priceLabels.allTextContents();
+    const labels = await this.text.prices.allTextContents();
     return labels.map((label) => Number(label.replace(/[^0-9.]/g, '')));
   }
 
   async openFirstCard() {
-    await this.cards.first().click();
+    await this.link.cards.first().click();
   }
 }

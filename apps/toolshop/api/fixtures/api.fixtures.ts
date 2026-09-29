@@ -6,27 +6,13 @@ import { UsersApi } from '../users.api';
 import { loginAs } from '../session';
 
 type ApiFixtures = {
-  /** Which role `api` signs in as. Override with `test.use({ apiRole: 'admin' })`. */
   apiRole: Role;
-  /** Signed in as `apiRole`, with a bearer token already attached. */
   api: ApiClient;
-  /** No Authorization header at all - for 401 tests. */
   anonApi: ApiClient;
   productsApi: ProductsApi;
   usersApi: UsersApi;
 };
 
-/**
- * Same shape as the UI fixtures, on purpose.
- *
- * In the UI the shared state is a storageState file; here it is a bearer token.
- * Either way the fixture is what owns acquiring it and cleaning up after it, so
- * a spec never thinks about authentication at all.
- *
- * Note that the built-in `request` fixture cannot be reused across roles - it
- * carries one header set for the whole test - so these fixtures build their own
- * contexts with `request.newContext()` and dispose of them on teardown.
- */
 export const test = base.extend<ApiFixtures>({
   apiRole: ['user', { option: true }],
 

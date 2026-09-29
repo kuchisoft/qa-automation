@@ -2,11 +2,6 @@ import { ROLES, UNKNOWN_ACCOUNT } from '../../config/roles';
 import { expect, test } from '../../api/fixtures/api.fixtures';
 import { UsersApi, type LoginResponse, type User } from '../../api/users.api';
 
-/**
- * Authentication is the one place a resource object is built on `anonApi`
- * rather than `api`: asking for a token is the thing you do before you have one.
- * Composing it here is one line, and it keeps UsersApi free of special cases.
- */
 test.describe('POST /users/login', () => {
   test('issues a bearer token for a seeded role', async ({ anonApi }) => {
     const users = new UsersApi(anonApi);
@@ -19,7 +14,6 @@ test.describe('POST /users/login', () => {
     expect(body.expires_in).toBeGreaterThan(0);
   });
 
-  /** Safe because the address belongs to no account, so nothing can be locked. */
   test('rejects an account that does not exist', async ({ anonApi }) => {
     const users = new UsersApi(anonApi);
 
@@ -34,7 +28,6 @@ test.describe('authorisation', () => {
     expect((await anonApi.get('/users')).status()).toBe(401);
   });
 
-  // `apiRole` defaults to "user", so this is the non-admin case.
   test('a customer token is authenticated but forbidden from /users', async ({ usersApi }) => {
     expect((await usersApi.all()).status()).toBe(403);
   });

@@ -11,14 +11,6 @@ type UiFixtures = {
   checkoutPage: CheckoutPage;
 };
 
-/**
- * One fixture file for the whole app.
- *
- * Every page object here is a thin constructor over the built-in `page`, and
- * fixtures are lazy, so a spec only pays for the page objects it actually asks
- * for. That is why the previous per-page fixtures plus `mergeTests(...)` in each
- * spec could collapse into this single `test` export.
- */
 export const test = base.extend<UiFixtures>({
   loginPage: async ({ page }, use) => {
     await use(new LoginPage(page));
