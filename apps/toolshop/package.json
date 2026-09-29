@@ -1,0 +1,14 @@
+{
+  "name": "@qa/toolshop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "UI + API Playwright suite for Practice Software Testing (Toolshop). The reference app for a target system that exposes both a browser UI and a documented REST API.",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --project=toolshop-ui",
+    "test:api": "playwright test --project=toolshop-api",
+    "test:integration": "playwright test --project=toolshop-integration",
+    "test:setup": "playwright test --project=\"toolshop-setup-*\"",
+    "report": "playwright show-report"
+  }
+}

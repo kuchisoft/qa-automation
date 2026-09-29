@@ -1,0 +1,12 @@
+{
+  "name": "@qa/saucedemo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "UI-only Playwright suite for saucedemo.com. Kept as the reference for a target app that exposes no public API.",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --project=saucedemo-ui",
+    "test:setup": "playwright test --project=saucedemo-setup",
+    "report": "playwright show-report"
+  }
+}

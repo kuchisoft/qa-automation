@@ -1,0 +1,26 @@
+{
+  "name": "qa-automation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright automation monorepo. One folder per target application under apps/, each split into a native ui/ layer (browser context) and api/ layer (request context).",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "npm run test --workspaces --if-present",
+    "test:ui": "npm run test:ui --workspaces --if-present",
+    "test:api": "npm run test:api --workspaces --if-present",
+    "test:saucedemo": "npm run test --workspace @qa/saucedemo",
+    "test:toolshop": "npm run test --workspace @qa/toolshop",
+    "report:saucedemo": "npm run report --workspace @qa/saucedemo",
+    "report:toolshop": "npm run report --workspace @qa/toolshop"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.3",
+    "typescript": "^7.0.2"
+  }
+}
